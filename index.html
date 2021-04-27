@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Book Library</title> 
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div id="back-hang"></div>
+            <header class="header">
+                <h1>BOOK LIBRARY</h1>
+            </header>
+            <div class="btn-div">
+                <button id="add-btn">ADD BOOK <i class="fa fa-plus" aria-hidden="true"></i></button>
+            </div>
+            <div class="saved-books">
+                <h2>SAVED BOOKS</h2>
+                <div id="saved-books"></div>
+            </div>
+            <div id="container">
+                <form id="form">
+                        <div class="form-control">
+                            <label for="name" id="name-label">Book Title</label>
+                            <input id="name" type="text" name="name" class="input-label">
+                        </div>
+                        <div class="form-control">
+                            <label for="author" id="author-label">Book Author</label>
+                            <input id="author" type="text" class="input-label" name="author">
+                        </div>
+                        <div class="form-control">
+                            <label for="pages" id="pages-label">Number of Pages</label>
+                            <input id="pages" type="number" class="input-label" name="pages">
+                        </div>
+                        <div class="form-control" id="read-status">
+                            <p>Read Status</p>
+                            <select id="dropdown" name="status" class="input-label">
+                                <option disabled selected value>Select read status</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Not completed">Not completed</option>
+                            </select>
+                        </div>
+                        <div class="btn-control">
+                            <button type="button" id="save" class="form-btn">SAVE <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                            <button type="button" id="cancelBtn" class="form-btn">CANCEL <i class="fa fa-ban" aria-hidden="true"></i></button>
+                        </div>
+                </form>
+            </div>
+            <footer></footer>
+        </div>
+        <script src="./dist/app.js"></script>
+    </body>
+</html>

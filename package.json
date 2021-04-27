@@ -1,0 +1,39 @@
+{
+  "name": "book-library",
+  "version": "1.0.0",
+  "description": "A storage for your favorite books, both read and unread.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --progress --mode=production",
+    "watch": "webpack --progress --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chukky9/book-library.git"
+  },
+  "author": "Alozie Chukwuemeka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chukky9/book-library/issues"
+  },
+  "homepage": "https://github.com/Chukky9/book-library#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.16",
+    "@babel/preset-env": "^7.13.15",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.4",
+    "style-loader": "^2.0.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.35.1",
+    "webpack-cli": "^4.6.0"
+  },
+  "dependencies": {
+    "animate.css": "^4.1.1",
+    "bootstrap": "^5.0.0-beta3",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.6.0"
+  },
+  "babel": {
+    "presets": ["@babel/preset-env"]
+  }
+}

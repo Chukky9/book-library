@@ -1,0 +1,116 @@
+import 'font-awesome/css/font-awesome.min.css';
+import "animate.css/animate.css";
+import $ from 'jquery';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css';
+
+function book(title, author, pages, read) {
+    let obj = Object.create(book.prototype);
+    obj.title = title;
+    obj.author = author;
+    obj.pages = pages;
+    obj.read = read;
+    return obj;
+}
+
+const MyApp = (function() {
+    let myLibrary = [];
+    let title = '';
+    let author = '';
+    let pages = '';
+    let status = '';
+
+    const save = function() {
+        title = $('#name').val();
+        author = $('#author').val();
+        pages = $('#pages').val();
+        status = $('#dropdown').val();
+        
+        if (title=='' || author=='' || pages=='' || status=='') {
+            alert(`Please fill in all fields`);
+        } else {
+            let newBook = book(title, author, pages, status);
+            myLibrary.push(newBook);
+            $("#container").css('transform', 'scale(0)');
+            $('#container').css('animation', 'backOutDown').css('animation-duration', '1.5s');
+            $("#back-hang").css('opacity', 0);
+            $('#add-btn').prop('disabled', false);
+            $('#form').trigger('reset');
+            let index = myLibrary.indexOf(newBook);
+            if(index>-1) {
+                localStorage.setItem(newBook.title, JSON.stringify(newBook));
+            }
+            bookCreate(newBook);
+        }
+    }
+
+    const bookCreate = function(book) {
+        let obj = JSON.parse(localStorage.getItem(book.title));
+        console.log(obj);
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("book-div");
+
+        const nameOfBook = document.createElement("h3");
+        $(nameOfBook).text(`Title: ${book.title}`).appendTo(newDiv);
+
+        const authorOfBook = document.createElement("h3");
+        $(authorOfBook).text(`Author: ${book.author}`).appendTo(newDiv);
+
+        const pagesOfBook = document.createElement("h3");
+        $(pagesOfBook).text(`Number of Pages: ${book.pages}`).appendTo(newDiv);
+
+        const readStatus = document.createElement("h3");
+        $(readStatus).text(`Read Status: ${book.read}`).appendTo(newDiv);
+
+        const btnDiv = document.createElement("div");
+        $(btnDiv).addClass('btnDiv').appendTo(newDiv);
+
+        const updateBtn = document.createElement("button");
+        $(updateBtn).addClass('extras').text(`Update Status`).appendTo(btnDiv);
+
+        const delBtn = document.createElement("button");
+        $(delBtn).addClass('extras').text(`Delete`).appendTo(btnDiv);
+
+        $(newDiv).appendTo('#saved-books');
+
+        updateBtn.addEventListener('click', () => {
+            if(readStatus.innerHTML == `Read Status: Completed`) {
+                $(readStatus).text(`Read Status: Not completed`);
+                book.read = "Not completed";
+            } else {
+                $(readStatus).text(`Read Status: Completed`);
+                book.read = "Completed";
+            }
+        })
+
+        delBtn.addEventListener('click', () => {
+            $(newDiv).remove();
+            let index = myLibrary.indexOf(book);
+            if (index>-1) {
+                myLibrary.splice(index, 1);
+                localStorage.removeItem(book.title);
+            }
+        })
+    }
+
+    const open = function() {
+        $("#container").css('transform', 'scale(1)');
+        $('#container').css('animation', 'fadeInDown').css('animation-duration', '0.5s');
+        $("#back-hang").css('opacity', 0.4);
+        $('#add-btn').prop('disabled', true);
+    }
+
+    const cancel = function() {
+        $("#container").css('transform', 'scale(0)');
+        $('#container').css('animation', 'backOutDown').css('animation-duration', '1.5s');
+        $("#back-hang").css('opacity', 0);
+        $('#add-btn').prop('disabled', false);
+        $('#form').trigger('reset');
+    }
+
+    return { open, cancel, save };
+})();
+
+document.querySelector("#add-btn").addEventListener('click', MyApp.open);
+document.querySelector("#cancelBtn").addEventListener('click', MyApp.cancel);
+document.querySelector('#save').addEventListener('click', MyApp.save);

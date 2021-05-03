@@ -19,48 +19,23 @@ const MyApp = (function() {
     let author = '';
     let pages = '';
     let status = '';
+    let obj = [];
 
-    const save = function() {
-        title = $('#name').val();
-        author = $('#author').val();
-        pages = $('#pages').val();
-        status = $('#dropdown').val();
-        
-        if (title=='' || author=='' || pages=='' || status=='') {
-            alert(`Please fill in all fields`);
-        } else {
-            let newBook = book(title, author, pages, status);
-            myLibrary.push(newBook);
-            $("#container").css('transform', 'scale(0)');
-            $('#container').css('animation', 'backOutDown').css('animation-duration', '1.5s');
-            $("#back-hang").css('opacity', 0);
-            $('#add-btn').prop('disabled', false);
-            $('#form').trigger('reset');
-            let index = myLibrary.indexOf(newBook);
-            if(index>-1) {
-                localStorage.setItem(newBook.title, JSON.stringify(newBook));
-            }
-            bookCreate(newBook);
-        }
-    }
-
-    const bookCreate = function(book) {
-        let obj = JSON.parse(localStorage.getItem(book.title));
-        console.log(obj);
+    const bookCreate = function(arr, i) {
         const newDiv = document.createElement("div");
         newDiv.classList.add("book-div");
 
         const nameOfBook = document.createElement("h3");
-        $(nameOfBook).text(`Title: ${book.title}`).appendTo(newDiv);
+        $(nameOfBook).text(`Title: ${i.title}`).appendTo(newDiv);
 
         const authorOfBook = document.createElement("h3");
-        $(authorOfBook).text(`Author: ${book.author}`).appendTo(newDiv);
+        $(authorOfBook).text(`Author: ${i.author}`).appendTo(newDiv);
 
         const pagesOfBook = document.createElement("h3");
-        $(pagesOfBook).text(`Number of Pages: ${book.pages}`).appendTo(newDiv);
+        $(pagesOfBook).text(`Number of Pages: ${i.pages}`).appendTo(newDiv);
 
         const readStatus = document.createElement("h3");
-        $(readStatus).text(`Read Status: ${book.read}`).appendTo(newDiv);
+        $(readStatus).text(`Read Status: ${i.read}`).appendTo(newDiv);
 
         const btnDiv = document.createElement("div");
         $(btnDiv).addClass('btnDiv').appendTo(newDiv);
@@ -76,22 +51,63 @@ const MyApp = (function() {
         updateBtn.addEventListener('click', () => {
             if(readStatus.innerHTML == `Read Status: Completed`) {
                 $(readStatus).text(`Read Status: Not completed`);
-                book.read = "Not completed";
+                i.read = "Not completed";
             } else {
                 $(readStatus).text(`Read Status: Completed`);
-                book.read = "Completed";
+                i.read = "Completed";
             }
-        })
+            //localStorage.setItem(0, JSON.stringify(arr));
+        });
 
         delBtn.addEventListener('click', () => {
             $(newDiv).remove();
-            let index = myLibrary.indexOf(book);
-            if (index>-1) {
-                myLibrary.splice(index, 1);
-                localStorage.removeItem(book.title);
+            let index = arr.indexOf(i);
+            console.log(index);
+            if(index>-1) {
+                arr.splice(index, 1);
+                console.log(arr);
+                arr.filter(Boolean);
+                localStorage.setItem(0, JSON.stringify(arr));
             }
+            
         })
+}
+
+    const save = function() {
+        title = $('#name').val();
+        author = $('#author').val();
+        pages = $('#pages').val();
+        status = $('#dropdown').val();
+        
+        if (title=='' || author=='' || pages=='' || status==null) {
+            alert(`Please fill in all fields`);
+        } else {
+            if (localStorage.getItem(0)) {
+                myLibrary = JSON.parse(localStorage.getItem(0));
+            }
+            let newBook = book(title, author, pages, status);
+            myLibrary.push(newBook);
+            $("#container").css('transform', 'scale(0)');
+            $('#container').css('animation', 'backOutDown').css('animation-duration', '1.5s');
+            $("#back-hang").css('opacity', 0);
+            $('#add-btn').prop('disabled', false);
+            $('#form').trigger('reset');
+            localStorage.setItem(0, JSON.stringify(myLibrary));
+            
+            bookCreate(myLibrary, newBook);
+            }
+        }
+    
+    const savedBooks = function() {
+        if (localStorage.length) {
+        obj = JSON.parse(localStorage.getItem(0));
+
+        for (let i=0; i<obj.length; i++) {
+
+            bookCreate(obj, obj[i]);
+        }
     }
+}
 
     const open = function() {
         $("#container").css('transform', 'scale(1)');
@@ -108,9 +124,10 @@ const MyApp = (function() {
         $('#form').trigger('reset');
     }
 
-    return { open, cancel, save };
+    return { open, cancel, save, savedBooks };
 })();
 
+MyApp.savedBooks();
 document.querySelector("#add-btn").addEventListener('click', MyApp.open);
 document.querySelector("#cancelBtn").addEventListener('click', MyApp.cancel);
 document.querySelector('#save').addEventListener('click', MyApp.save);

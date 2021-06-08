@@ -62,10 +62,8 @@ const MyApp = (function() {
         delBtn.addEventListener('click', () => {
             $(newDiv).remove();
             let index = arr.indexOf(i);
-            console.log(index);
             if(index>-1) {
                 arr.splice(index, 1);
-                console.log(arr);
                 arr.filter(Boolean);
                 localStorage.setItem(0, JSON.stringify(arr));
             }
@@ -95,19 +93,17 @@ const MyApp = (function() {
             localStorage.setItem(0, JSON.stringify(myLibrary));
             
             bookCreate(myLibrary, newBook);
-            }
         }
+    }
     
     const savedBooks = function() {
         if (localStorage.length) {
-        obj = JSON.parse(localStorage.getItem(0));
-
-        for (let i=0; i<obj.length; i++) {
-
-            bookCreate(obj, obj[i]);
+            obj = JSON.parse(localStorage.getItem(0));
+            for (let i=0; i<obj.length; i++) {
+                bookCreate(obj, obj[i]);
+            }
         }
     }
-}
 
     const open = function() {
         $("#container").css('transform', 'scale(1)');
